@@ -69,4 +69,4 @@ st.dataframe(datefiltered_df, column_order=("payment_date","amount","currency","
 datefiltered_payments = datefiltered_df['usd_amount'].sum()
 st.metric("Total Payments",numerize(datefiltered_payments))
 
-st.text("#Algo")
+st.markdown("**Payment Schedule**")
