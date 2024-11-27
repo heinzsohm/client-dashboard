@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from numerize.numerize import numerize
 
 st.title("Client Portal")
 
@@ -19,4 +20,4 @@ col1.metric(label="Total Clients", value=clients)
 col2.metric(label="Clients with Contract", value=clients_with_contracts)
 col3.metric(label="Clients with Payments", value=clients_with_payments)
 st.bar_chart(df_payments,x="payment_date",y=["usd_amount"])
-st.metric(label="Total Payments", value=df_payments['usd_amount'].sum())
+st.metric(label="Total Payments", value=numerize(df_payments['usd_amount'].sum()))
