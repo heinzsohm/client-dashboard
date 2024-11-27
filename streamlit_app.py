@@ -1,6 +1,17 @@
 import streamlit as st
 import pandas as pd
 from numerize.numerize import numerize
+from datetime import datetime
+
+
+# Get today's date and quarter
+today = datetime.today()
+current_year = today.year
+current_quarter = (today.month - 1) // 3 + 1
+
+# Function to get the quarter of a date
+def get_quarter(date):
+    return (date.month - 1) // 3 + 1
 
 st.title("Client Portal")
 
@@ -20,9 +31,10 @@ col1, col2, col3 = st.columns(3)
 col1.metric(label="Total Clients", value=clients)
 col2.metric(label="Clients with Contract", value=clients_with_contracts)
 col3.metric(label="Clients with Payments", value=clients_with_payments)
-st.bar_chart(df_payments,x="payment_date",y=["usd_amount"],stack=True)
+st.bar_chart(df_payments,x="month_date",y=["usd_amount"],stack=True)
 col1.metric(label="Total Payments", value=numerize(df_payments['usd_amount'].sum()))
 sales_this_month = df_payments['usd_amount'].where(df_payments['month_date']=='2024-11').sum()
 sales_last_month = df_payments['usd_amount'].where(df_payments['month_date']=='2024-10').sum()
-sales_this_q = df_payments['usd_amount'].where(df_payments['payment_date']=='2024-11').sum()
-col2.metric(label="This Month", value=numerize(sales_this_month),delta=numerize(sales_this_month - sales_last_month))
+sales_this_q = df_payments['usd_amount'].where(get_quarter(df_payments['payment_date'])==current_quarter).sum()
+col2.metric(label="This Quarter", value=numerize(sales_this_q),delta=numerize(sales_this_month - sales_last_month))
+col3.metric(label="This Month", value=numerize(sales_this_month),delta=numerize(sales_this_month - sales_last_month))
