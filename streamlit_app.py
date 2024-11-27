@@ -52,3 +52,5 @@ st.dataframe(filtered_df, column_order=("payment_date","amount","currency","name
             "Payment Date",
             format="YYYY-MM-DD"
         )})
+filtered_payments = filtered_df['usd_amount'].sum()
+st.metric("Total Payments",filtered_payments)
