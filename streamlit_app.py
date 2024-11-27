@@ -71,4 +71,16 @@ st.metric("Total Payments",numerize(datefiltered_payments))
 
 st.markdown('''Payment Schedule''')
 client_contracts = df_contracts[df_contracts['name'].isin(client_list)]
-client_contracts
+payment_schedule = []
+for index, row in client_contracts.iterrows():
+    start_date = row['contract_start_date']
+    name = row['name']
+    payment_cycle = row['payment_cycle']
+    months_since_today = diff_month(today,start_date)
+    payment_schedule.append(months_since_today)
+
+payment_schedule
+
+
+def diff_month(d1, d2):
+    return (d1.year - d2.year) * 12 + d1.month - d2.month
