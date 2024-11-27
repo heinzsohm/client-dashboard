@@ -54,3 +54,5 @@ st.dataframe(filtered_df, column_order=("payment_date","amount","currency","name
         )})
 filtered_payments = filtered_df['usd_amount'].sum()
 st.metric("Total Payments",numerize(filtered_payments))
+month_options = st.multiselect("Selecciona Fecha",df_payments['month_date'].unique())
+st.write(month_options)
