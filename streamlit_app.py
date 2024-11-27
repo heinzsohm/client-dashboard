@@ -42,4 +42,4 @@ col2.metric(label="This Quarter", value=numerize(sales_this_q))
 col3.metric(label="This Month", value=numerize(sales_this_month))
 client_list = st.multiselect("Selecciona Cliente",df['name'].unique())
 filtered_df = df_payments[df_payments['name'].isin(client_list)]
-st.dataframe(filtered_df)
+st.dataframe(filtered_df, column_order=("payment_date","amount","currency","name","bank_account_identifier","usd_amount"))
