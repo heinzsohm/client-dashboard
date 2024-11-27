@@ -40,6 +40,6 @@ sales_this_month = df_payments['usd_amount'].where(df_payments['same_month']).su
 sales_this_q = df_payments['usd_amount'].where(df_payments['same_quarter']).sum()
 col2.metric(label="This Quarter", value=numerize(sales_this_q))
 col3.metric(label="This Month", value=numerize(sales_this_month))
-client_list = st.multiselect("Selecciona Cliente",df['name'].unique(),df['name'].unique())
-st.dataframe(df_payments[df_payments['name'].isin(client_list)])
-st.write("You selected:", client_list)
+client_list = st.multiselect("Selecciona Cliente",df['name'].unique())
+filtered_df = df_payments[df_payments['name'].isin(client_list)]
+st.dataframe(filtered_df)
