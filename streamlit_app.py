@@ -48,4 +48,7 @@ st.dataframe(filtered_df, column_order=("payment_date","amount","currency","name
         ),"amount":st.column_config.NumberColumn(
             "Amount",
             format="$ %.2f",
+        ),"payment_date":st.column_config.DateColumn(
+            "Payment Date",
+            format="DD.MM.YYYY"
         )})
