@@ -41,3 +41,5 @@ sales_this_q = df_payments['usd_amount'].where(df_payments['same_quarter']).sum(
 col2.metric(label="This Quarter", value=numerize(sales_this_q))
 col3.metric(label="This Month", value=numerize(sales_this_month))
 st.dataframe(df_payments)
+client_list = st.multiselect("Selecciona Cliente",df['name'].unique())
+st.write("You selected:", client_list)
