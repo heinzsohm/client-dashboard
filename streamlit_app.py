@@ -44,9 +44,5 @@ client_list = st.multiselect("Selecciona Cliente",df['name'].unique())
 filtered_df = df_payments[df_payments['name'].isin(client_list)]
 st.dataframe(filtered_df, column_order=("payment_date","amount","currency","name","bank_account_identifier","usd_amount"),column_config = {"usd_amount":st.column_config.NumberColumn(
             "Price (in USD)",
-            help="The price of the product in USD",
-            min_value=0,
-            max_value=100000,
-            step=1,
-            format="$%d",
+            format="$ %.2f"
         )})
