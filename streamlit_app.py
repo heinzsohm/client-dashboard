@@ -14,6 +14,10 @@ current_quarter = (today.month - 1) // 3 + 1
 def get_quarter(date):
     return (date.month - 1) // 3 + 1
 
+
+def diff_month(d1, d2):
+    return (d1.year - d2.year) * 12 + d1.month - d2.month
+
 st.title("Client Portal")
 
 conn = st.connection("postgresql", type="sql")
@@ -80,7 +84,3 @@ for index, row in client_contracts.iterrows():
     payment_schedule.append(months_since_today)
 
 payment_schedule
-
-
-def diff_month(d1, d2):
-    return (d1.year - d2.year) * 12 + d1.month - d2.month
