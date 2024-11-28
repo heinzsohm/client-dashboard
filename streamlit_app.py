@@ -88,3 +88,4 @@ for index, row in client_contracts.iterrows():
         payment_schedule.append({'months':months_since_today,'start_date':start_date,'payment_date':next_date})
 
 payment_schedule
+client_contracts
