@@ -84,7 +84,7 @@ for index, row in client_contracts.iterrows():
     count = 0
     while count < months_since_today:
         count += 1
-        next_date = start_date + timedelta(months=count) 
+        next_date = start_date + timedelta(days=count*30) 
         payment_schedule.append({'months':months_since_today,'start_date':start_date,'payment_date':next_date})
 
 payment_schedule
