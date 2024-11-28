@@ -79,7 +79,7 @@ payment_schedule = []
 for index, row in client_contracts.iterrows():
     start_date = row['contract_start_date']
     name = row['name']
-    payment_cycle = row['payment_cycle']
+    payment_cycle = int(row['payment_cycle'])
     months_since_today = diff_month(today,start_date)
     count = 0
     while count < months_since_today:
