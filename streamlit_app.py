@@ -81,6 +81,6 @@ for index, row in client_contracts.iterrows():
     name = row['name']
     payment_cycle = row['payment_cycle']
     months_since_today = diff_month(today,start_date)
-    payment_schedule.append(months_since_today)
+    payment_schedule.append({'months':months_since_today,'start_date':start_date})
 
 payment_schedule
