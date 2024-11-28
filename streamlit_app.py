@@ -84,9 +84,9 @@ for index, row in client_contracts.iterrows():
     months_since_today = diff_month(today,start_date)
     count = 0
     while count < months_since_today:
-        count += 1
         next_date = start_date + relativedelta(months=count)
         mod = count % payment_cycle if payment_cycle > 1 else 0
+        count += 1
         if mod == 0:
             payment_schedule.append({'payment_date':next_date,'payment_amount':mrr*payment_cycle})
     count = 0
