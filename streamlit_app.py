@@ -57,7 +57,8 @@ st.dataframe(filtered_df, column_order=("payment_date","amount","currency","name
             format="YYYY-MM-DD"
         )})
 filtered_payments = filtered_df['usd_amount'].sum()
-st.metric("Total Payments",numerize(filtered_payments))
+col4, col5, col6 = st.columns(3)
+col4.metric("Total Payments",numerize(filtered_payments))
 month_options = st.multiselect("Selecciona Fecha",df_payments['month_date'].unique(),['2024-11'])
 datefiltered_df = df_payments[df_payments['month_date'].isin(month_options)]
 st.dataframe(datefiltered_df, column_order=("payment_date","amount","currency","name","bank_account_identifier","usd_amount"),column_config = {"usd_amount":st.column_config.NumberColumn(
@@ -90,5 +91,10 @@ for index, row in client_contracts.iterrows():
         if mod == 0:
             payment_schedule.append({'payment_date':next_date,'payment_amount':mrr*payment_cycle})
     count = 0
-payment_schedule
-client_contracts
+
+expected_payments = 0
+for i in payment_schedule:
+    expected_payments += i['payment_amount']
+col5.metric("Expected Payments",numerize(expected_payments))
+col6.metric("Payment Difference",numerize(filtered_payments - expected_payments))
+
