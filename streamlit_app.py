@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from numerize.numerize import numerize
-from datetime import datetime
+from datetime import datetime,timedelta
 
 
 # Get today's date and quarter
@@ -84,7 +84,7 @@ for index, row in client_contracts.iterrows():
     count = 0
     while count < months_since_today:
         count += 1
-        next_date = start_date + datetime.timedelta(months=count) 
+        next_date = start_date + timedelta(months=count) 
         payment_schedule.append({'months':months_since_today,'start_date':start_date,'payment_date':next_date})
 
 payment_schedule
