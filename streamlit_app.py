@@ -81,6 +81,10 @@ for index, row in client_contracts.iterrows():
     name = row['name']
     payment_cycle = row['payment_cycle']
     months_since_today = diff_month(today,start_date)
-    payment_schedule.append({'months':months_since_today,'start_date':start_date})
+    count = 0
+    while count < months_since_today:
+        count += 1
+        next_date = start_date + datetime.timedelta(months=count) 
+        payment_schedule.append({'months':months_since_today,'start_date':start_date,'payment_date':next_date})
 
 payment_schedule
