@@ -97,4 +97,4 @@ for i in payment_schedule:
     expected_payments += i['payment_amount']
 col5.metric("Expected Payments",numerize(expected_payments))
 col6.metric("Payment Difference",numerize(filtered_payments - expected_payments))
-
+payment_schedule
