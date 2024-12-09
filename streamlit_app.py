@@ -101,7 +101,7 @@ payment_schedule
 
 first_payment = []
 for i in clients_with_payments:
-    pay_date = df_payments[df_payments['name'] == i]['payment_date'].min()
+    pay_date = df_payments[df_payments['name'].isin([i])]['payment_date'].min()
     first_payment.append({'name':i,'first_payment':pay_date})
 
 first_payment
