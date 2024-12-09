@@ -113,7 +113,8 @@ monthly_counts = min_values.groupby('year_month').size().reset_index(name='count
 monthly_counts['year_month'] = monthly_counts['year_month'].astype(str)
 
 # Streamlit app
-st.title("Payment Counts Per Month")
+st.title("New Clients Per Month")
 
 # Bar chart
 st.bar_chart(monthly_counts.set_index('year_month'))
+
