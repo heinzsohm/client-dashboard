@@ -99,5 +99,5 @@ col5.metric("Expected Payments",numerize(expected_payments))
 col6.metric("Payment Difference",numerize(filtered_payments - expected_payments))
 payment_schedule
 
-min_values = df_payments.groupby('name')['payment_date'].min().reset_index()
+min_values = df_payments.groupby('name')['payment_date'].dt.month.min().reset_index()
 st.bar_chart(min_values)
