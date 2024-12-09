@@ -100,4 +100,20 @@ col6.metric("Payment Difference",numerize(filtered_payments - expected_payments)
 payment_schedule
 
 min_values = df_payments.groupby('name')['payment_date'].min().reset_index()
-st.bar_chart(min_values)
+# Convert 'payment_date' to datetime
+min_values['payment_date'] = pd.to_datetime(min_values['payment_date'])
+
+# Extract month and year for grouping
+min_values['year_month'] = min_values['payment_date'].dt.to_period('M')
+
+# Count occurrences per month
+monthly_counts = min_values.groupby('year_month').size().reset_index(name='count')
+
+# Prepare data for Streamlit
+monthly_counts['year_month'] = monthly_counts['year_month'].astype(str)
+
+# Streamlit app
+st.title("Payment Counts Per Month")
+
+# Bar chart
+st.bar_chart(monthly_counts.set_index('year_month'))
