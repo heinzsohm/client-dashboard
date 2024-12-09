@@ -99,10 +99,5 @@ col5.metric("Expected Payments",numerize(expected_payments))
 col6.metric("Payment Difference",numerize(filtered_payments - expected_payments))
 payment_schedule
 
-first_payment = []
-for i in clients_with_payments:
-    pay_date = df_payments[df_payments['name'].isin([i])]['payment_date'].min()
-    first_payment.append({'name':i,'first_payment':pay_date})
-
-first_payment
-
+min_values = df_payments.groupby('name')['payment_date'].min().reset_index()
+min_values
