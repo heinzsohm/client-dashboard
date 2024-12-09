@@ -98,3 +98,11 @@ for i in payment_schedule:
 col5.metric("Expected Payments",numerize(expected_payments))
 col6.metric("Payment Difference",numerize(filtered_payments - expected_payments))
 payment_schedule
+
+first_payment = []
+for i in clients_with_payments:
+    pay_date = df_payments[df_payments['name'] == i]['payment_date'].min()
+    first_payment.append({'name':i,'first_payment':pay_date})
+
+first_payment
+
