@@ -118,3 +118,12 @@ st.title("New Clients Per Month")
 # Bar chart
 st.bar_chart(monthly_counts.set_index('year_month'))
 
+df_cohorts = conn.query('''WITH cohorts as (
+    SELECT client_uuid, min(TO_CHAR(payment_date,'yyyy-mm')) as cohort FROM client_payments GROUP BY 1 
+    )
+    SELECT b.cohort,ROUND(SUM(CASE WHEN A.CURRENCY = 'USD' THEN a.amount WHEN a.currency = 'MXN' THEN a.amount/20  WHEN a.currency ='COP' THEN a.amount/4200 ELSE a.AMount END ),2)
+    FROM client_payments a 
+    JOIN cohorts b on a.client_uuid = b.client_uuid
+    GROUP BY 1 ''', ttl="10m")
+df_cohorts
+
