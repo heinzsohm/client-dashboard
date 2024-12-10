@@ -125,5 +125,6 @@ df_cohorts = conn.query('''WITH cohorts as (
     FROM client_payments a 
     JOIN cohorts b on a.client_uuid = b.client_uuid
     GROUP BY 1 ''', ttl="10m")
-df_cohorts
 
+df_cohorts['avg_amount'] = df_cohorts['total_amount'] / df_cohorts['num_clients']
+df_cohorts
