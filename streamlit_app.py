@@ -128,3 +128,5 @@ df_cohorts = conn.query('''WITH cohorts as (
 
 df_cohorts['avg_amount'] = df_cohorts['total_amount'] / df_cohorts['num_clients']
 df_cohorts
+filtered_cont = df_contracts[df_contracts['name'].isin(client_list)]
+filtered_cont
