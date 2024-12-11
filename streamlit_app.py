@@ -79,10 +79,14 @@ client_contracts = df_contracts[df_contracts['name'].isin(client_list)]
 payment_schedule = []
 for index, row in client_contracts.iterrows():
     start_date = row['contract_start_date']
+    end_date = row['contract_end_date']
     name = row['name']
     mrr = row['mrr']
     payment_cycle = int(row['payment_cycle'])
-    months_since_today = diff_month(today,start_date)
+    if end_date is not None:
+        months_since_today = diff_month(end_date,start_date)
+    else:
+        months_since_today = diff_month(today,start_date)
     count = 0
     while count < months_since_today:
         next_date = start_date + relativedelta(months=count)
