@@ -44,6 +44,12 @@ sales_this_month = df_payments['usd_amount'].where(df_payments['same_month']).su
 sales_this_q = df_payments['usd_amount'].where(df_payments['same_quarter']).sum()
 col2.metric(label="This Quarter", value=numerize(sales_this_q))
 col3.metric(label="This Month", value=numerize(sales_this_month))
+
+df_clients_with_pending_payments = conn.query("SELECT c.name, b.client_uuid, CASE WHEN a.payment_date is null THEN 'PENDING' ELSE a.payment_date::TEXT END  FROM client_contracts b LEFT JOIN client_payments a on a.client_uuid = b.client_uuid and TO_CHAR(a.payment_date,'yyyy-mm')  = TO_CHAR(NOW(),'yyyy-mm') JOIN clients c on b.client_uuid = c.uuid WHERE b.payment_cycle = '1' AND b.status is null AND b.mrr > 0 ;", ttl="10m")
+
+st.markdown('''Monthy Active Clients''')
+st.write(df_clients_with_pending_payments)
+
 client_list = st.multiselect("Selecciona Cliente",df['name'].unique())
 filtered_df = df_payments[df_payments['name'].isin(client_list)]
 st.dataframe(filtered_df, column_order=("payment_date","amount","currency","name","bank_account_identifier","usd_amount"),column_config = {"usd_amount":st.column_config.NumberColumn(
@@ -134,8 +140,3 @@ df_cohorts['avg_amount'] = df_cohorts['total_amount'] / df_cohorts['num_clients'
 df_cohorts
 filtered_cont = df_contracts[df_contracts['name'].isin(client_list)]
 filtered_cont
-
-df_clients_with_pending_payments = conn.query("SELECT c.name, b.client_uuid, CASE WHEN a.payment_date is null THEN 'PENDING' ELSE a.payment_date::TEXT END  FROM client_contracts b LEFT JOIN client_payments a on a.client_uuid = b.client_uuid and TO_CHAR(a.payment_date,'yyyy-mm')  = TO_CHAR(NOW(),'yyyy-mm') JOIN clients c on b.client_uuid = c.uuid WHERE b.payment_cycle = '1' AND b.status is null AND b.mrr > 0 ;", ttl="10m")
-
-st.markdown('''Monthy Active Clients''')
-st.write(df_clients_with_pending_payments)
