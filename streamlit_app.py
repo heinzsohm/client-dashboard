@@ -135,7 +135,7 @@ df_cohorts
 filtered_cont = df_contracts[df_contracts['name'].isin(client_list)]
 filtered_cont
 
-df_clients_with_pending_payments = conn.query("SELECT c.name, b.client_uuid, CASE WHEN a.payment_date is null THEN 'PENDING' ELSE a.payment_date::TEXT END  FROM client_contracts b LEFT JOIN client_payments a on a.client_uuid = b.client_uuid and TO_CHAR(a.payment_date,'yyyy-mm')  = TO_CHAR(NOW(),'yyyy-mm') JOIN clients c on b.client_uuid = c.uuid WHERE b.payment_cycle = '1' ;", ttl="10m")
+df_clients_with_pending_payments = conn.query("SELECT c.name, b.client_uuid, CASE WHEN a.payment_date is null THEN 'PENDING' ELSE a.payment_date::TEXT END  FROM client_contracts b LEFT JOIN client_payments a on a.client_uuid = b.client_uuid and TO_CHAR(a.payment_date,'yyyy-mm')  = TO_CHAR(NOW(),'yyyy-mm') JOIN clients c on b.client_uuid = c.uuid WHERE b.payment_cycle = '1' AND b.status is null ;", ttl="10m")
 
 st.markdown('''Monthy Active Clients''')
 st.write(df_clients_with_pending_payments)
