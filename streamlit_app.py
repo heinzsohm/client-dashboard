@@ -140,3 +140,8 @@ df_cohorts['avg_amount'] = df_cohorts['total_amount'] / df_cohorts['num_clients'
 df_cohorts
 filtered_cont = df_contracts[df_contracts['name'].isin(client_list)]
 filtered_cont
+
+st.title("Payments by Sales Rep")
+df_sales_by_manager = conn.query('''SELECT CONCAT(u.first_name,' ',U.LAST_NAME) as full_name, SUM(case when a.currency = 'USD' then a.amount when a.currency = 'MXN' then a.amount/20 WHEN a.currency = 'COP' THEN a.amount/4200 ELSE A.AMOUNT END) as total_payments FROM client_payments a JOIN clients b on a.client_uuid = b.uuid JOIN users u on b.sales_manager_id = u.id
+    GROUP BY 1''',ttl='10m')
+df_sales_by_manager
