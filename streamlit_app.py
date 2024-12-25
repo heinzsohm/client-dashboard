@@ -145,3 +145,10 @@ st.title("Payments by Sales Rep")
 df_sales_by_manager = conn.query('''SELECT CONCAT(u.first_name,' ',U.LAST_NAME) as full_name, ROUND(SUM(case when a.currency = 'USD' then a.amount when a.currency = 'MXN' then a.amount/20 WHEN a.currency = 'COP' THEN a.amount/4200 ELSE A.AMOUNT END),2) as total_payments FROM client_payments a JOIN clients b on a.client_uuid = b.uuid JOIN users u on b.sales_manager_id = u.id
     GROUP BY 1''',ttl='10m')
 df_sales_by_manager
+
+st.title("MRR per Month (Contract)")
+df_contracts_sales = conn.query('''WITH interest_dates as (
+    SELECT * FROM (VALUES (1, '2024-12-01'), (2, '2024-11-01'), (3, '2024-10-01'), (4, '2024-09-01'),(5, '2024-08-01'),(6, '2024-07-01'), (7, '2024-06-01'), (8, '2024-05-01'), (9, '2024-04-01'), (10, '2024-03-01'), (11, '2024-02-01'), (12, '2024-01-01')) AS t (num,d_date)
+    ) 
+    SELECT d_date AS month_sales, sum(mrr) FROM client_contracts A  JOIN interest_dates B on A.contract_start_date::TEXT <= B.d_date AND (A.contract_end_date::text >= B.d_date or A.contract_end_date is null) GROUP BY 1 ORDER BY 1 DESC''',ttl='10m')
+df_contracts_sales
