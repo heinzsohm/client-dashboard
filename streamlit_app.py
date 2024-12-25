@@ -152,4 +152,4 @@ df_contracts_sales = conn.query('''WITH interest_dates as (
     ) 
     SELECT d_date AS month_sales, sum(mrr) FROM client_contracts A  JOIN interest_dates B on A.contract_start_date::TEXT <= B.d_date AND (A.contract_end_date::text >= B.d_date or A.contract_end_date is null) GROUP BY 1 ORDER BY 1 DESC''',ttl='10m')
 
-st.bar_chart(df_contracts_sales)
+st.bar_chart(df_contracts_sales.set_index('month_sales'))
