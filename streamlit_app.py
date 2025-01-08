@@ -287,3 +287,4 @@ fig.update_yaxes(
     secondary_y=True,
     range=[0, 100]  # Set range from 0 to 100 for percentage
 )
+st.plotly_chart(fig, use_container_width=True)
