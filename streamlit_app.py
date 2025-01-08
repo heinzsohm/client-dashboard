@@ -224,3 +224,66 @@ fig.update_layout(
 
 # Display the chart in Streamlit
 st.plotly_chart(fig, use_container_width=True)
+
+# Calculate the percentage
+df_sales_per_quarter['active_mrr_percentage'] = (df_sales_per_quarter['total_active_mrr'] / df_sales_per_quarter['total_mrr'] * 100)
+
+# Create the figure with secondary y-axis
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+# Add lines for MRR values
+fig.add_trace(
+    go.Bar(
+        name="Total MRR",
+        x=df_sales_per_quarter['year_q'],
+        y=df_sales_per_quarter['total_mrr'],
+        marker_color='rgb(158,202,225)'
+    ),
+    secondary_y=False,
+)
+
+fig.add_trace(
+    go.Bar(
+        name="Active MRR",
+        x=df_sales_per_quarter['year_q'],
+        y=df_sales_per_quarter['total_active_mrr'],
+        marker_color='rgb(94,158,217)'
+    ),
+    secondary_y=False,
+)
+
+# Add line for percentage
+fig.add_trace(
+    go.Scatter(
+        name="Active MRR %",
+        x=df_sales_per_quarter['year_q'],
+        y=df_sales_per_quarter['active_mrr_percentage'],
+        line=dict(color='rgb(255, 127, 14)', width=3),
+        mode='lines+markers',
+    ),
+    secondary_y=True,
+)
+
+# Update layout
+fig.update_layout(
+    title="MRR Values and Active Percentage Over Time",
+    barmode='group',
+    xaxis_title="Year Quarter",
+    yaxis_title="MRR ($)",
+    yaxis2_title="Active MRR Percentage (%)",
+    legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="left",
+        x=0.01
+    ),
+    hovermode='x unified'
+)
+
+# Update y-axes ranges
+fig.update_yaxes(title_text="MRR ($)", secondary_y=False)
+fig.update_yaxes(
+    title_text="Active MRR Percentage (%)", 
+    secondary_y=True,
+    range=[0, 100]  # Set range from 0 to 100 for percentage
+)
