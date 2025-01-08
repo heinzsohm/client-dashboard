@@ -153,3 +153,6 @@ df_contracts_sales = conn.query('''WITH interest_dates as (
     SELECT d_date AS month_sales, sum(mrr) FROM client_contracts A  JOIN interest_dates B on A.contract_start_date::TEXT <= B.d_date AND (A.contract_end_date::text >= B.d_date or A.contract_end_date is null) GROUP BY 1 ORDER BY 1 DESC''',ttl='10m')
 
 st.bar_chart(df_contracts_sales.set_index('month_sales'))
+
+df_sales_per_quarter = conn.query('''SELECT extract(year from contract_start_date) as year ,extract(quarter from contract_start_date) as q , sum(mrr) as total_mrr, count(*) as total_accounts, sum(case when contract_end_date is null then mrr else 0 end) as total_active_mrr, sum(case when contract_end_date is null then 1 else 0 end) as active_accounts FROM client_contracts group by 1,2  order by 1,2''',ttl='10m')
+df_sales_per_quarter
