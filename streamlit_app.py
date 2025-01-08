@@ -208,7 +208,7 @@ fig.add_trace(
 
 # Update layout
 fig.update_layout(
-    title="Accounts and MRR Over Time",
+    title="Accounts and NEW MRR Over Time",
     barmode='group',
     xaxis_title="Year Quarter",
     yaxis_title="Number of Accounts",
