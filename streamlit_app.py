@@ -3,6 +3,8 @@ import pandas as pd
 from numerize.numerize import numerize
 from datetime import datetime,timedelta
 from dateutil.relativedelta import relativedelta
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 # Get today's date and quarter
 today = datetime.today()
@@ -156,3 +158,69 @@ st.bar_chart(df_contracts_sales.set_index('month_sales'))
 
 df_sales_per_quarter = conn.query('''SELECT extract(year from contract_start_date) as year ,extract(quarter from contract_start_date) as q , sum(mrr) as total_mrr, count(*) as total_accounts, sum(case when contract_end_date is null then mrr else 0 end) as total_active_mrr, sum(case when contract_end_date is null then 1 else 0 end) as active_accounts FROM client_contracts group by 1,2  order by 1,2''',ttl='10m')
 df_sales_per_quarter
+
+df_sales_per_quarter['year_q'] = df_sales_per_quarter['year'].astype(str) + ' Q' + df_sales_per_quarter['q'].astype(str)
+
+# Create the figure with secondary y-axis
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+# Add bars for total and active accounts
+fig.add_trace(
+    go.Bar(
+        name="Total Accounts",
+        x=df_sales_per_quarter['year_q'],
+        y=df_sales_per_quarter['total_accounts'],
+        offsetgroup=0,
+    ),
+    secondary_y=False,
+)
+
+fig.add_trace(
+    go.Bar(
+        name="Active Accounts",
+        x=df_sales_per_quarter['year_q'],
+        y=df_sales_per_quarter['active_accounts'],
+        offsetgroup=1,
+    ),
+    secondary_y=False,
+)
+
+# Add lines for MRR
+fig.add_trace(
+    go.Scatter(
+        name="Total MRR",
+        x=df_sales_per_quarter['year_q'],
+        y=df_sales_per_quarter['total_mrr'],
+        line=dict(color='rgb(255, 127, 14)'),
+    ),
+    secondary_y=True,
+)
+
+fig.add_trace(
+    go.Scatter(
+        name="Active MRR",
+        x=df_sales_per_quarter['year_q'],
+        y=df_sales_per_quarter['total_active_mrr'],
+        line=dict(color='rgb(44, 160, 44)'),
+    ),
+    secondary_y=True,
+)
+
+# Update layout
+fig.update_layout(
+    title="Accounts and MRR Over Time",
+    barmode='group',
+    xaxis_title="Year Quarter",
+    yaxis_title="Number of Accounts",
+    yaxis2_title="MRR ($)",
+    legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="left",
+        x=0.01
+    ),
+    hovermode='x unified'
+)
+
+# Display the chart in Streamlit
+st.plotly_chart(fig, use_container_width=True)
