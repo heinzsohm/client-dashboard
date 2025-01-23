@@ -150,7 +150,7 @@ df_sales_by_manager
 
 st.title("MRR per Month (Contract)")
 df_contracts_sales = conn.query('''WITH interest_dates as (
-    SELECT * FROM (VALUES (1, '2024-12-01'), (2, '2024-11-01'), (3, '2024-10-01'), (4, '2024-09-01'),(5, '2024-08-01'),(6, '2024-07-01'), (7, '2024-06-01'), (8, '2024-05-01'), (9, '2024-04-01'), (10, '2024-03-01'), (11, '2024-02-01'), (12, '2024-01-01')) AS t (num,d_date)
+    SELECT * FROM (VALUES (1, '2025-01-01'), (2, '2024-12-01'), (3, '2024-11-01'), (4, '2024-10-01'),(5, '2024-09-01'),(6, '2024-08-01'), (7, '2024-07-01'), (8, '2024-06-01'), (9, '2024-05-01'), (10, '2024-04-01'), (11, '2024-03-01'), (12, '2024-02-01')) AS t (num,d_date)
     ) 
     SELECT d_date AS month_sales, sum(mrr) FROM client_contracts A  JOIN interest_dates B on A.contract_start_date::TEXT <= B.d_date AND (A.contract_end_date::text >= B.d_date or A.contract_end_date is null) GROUP BY 1 ORDER BY 1 DESC''',ttl='10m')
 
