@@ -11,6 +11,7 @@ today = datetime.today()
 current_year = today.year
 current_month = today.month
 current_quarter = (today.month - 1) // 3 + 1
+last_quarter = current_quarter - 1 if current_quarter > 1 else 4
 
 # Function to get the quarter of a date
 def get_quarter(date):
@@ -33,6 +34,7 @@ df_payments['usd_amount'] = df_payments.apply(lambda x: x['amount']/4000  if x['
 df_payments.payment_date = pd.to_datetime(df_payments.payment_date)
 df_payments['same_quarter'] = df_payments['payment_date'].apply(lambda x: x.year == current_year and get_quarter(x) == current_quarter)
 df_payments['same_month'] = df_payments['payment_date'].apply(lambda x: x.year == current_year and x.month == current_month)
+df_payments['last_quarter'] = df_payments['payment_date'].apply(lambda x: x.year == current_year and get_quarter(x) == last_quarter)
 clients = df['uuid'].nunique()
 clients_with_contracts = df_contracts['client_uuid'].nunique()
 clients_with_payments = df_payments['name'].nunique()
@@ -44,7 +46,9 @@ st.bar_chart(df_payments,x="month_date",y=["usd_amount"],stack=True)
 col1.metric(label="Total Payments", value=numerize(df_payments['usd_amount'].sum()))
 sales_this_month = df_payments['usd_amount'].where(df_payments['same_month']).sum()
 sales_this_q = df_payments['usd_amount'].where(df_payments['same_quarter']).sum()
-col2.metric(label="This Quarter", value=numerize(sales_this_q))
+sales_last_q = df_payments['usd_amount'].where(df_payments['last_quarter']).sum()
+col2.metric(label="Last Quarter", value=numerize(sales_last_q))
+col3.metric(label="This Quarter", value=numerize(sales_this_q))
 col3.metric(label="This Month", value=numerize(sales_this_month))
 
 df_clients_with_pending_payments = conn.query("SELECT c.name, b.client_uuid, CASE WHEN a.payment_date is null THEN 'PENDING' ELSE a.payment_date::TEXT END  FROM client_contracts b LEFT JOIN client_payments a on a.client_uuid = b.client_uuid and TO_CHAR(a.payment_date,'yyyy-mm')  = TO_CHAR(NOW(),'yyyy-mm') JOIN clients c on b.client_uuid = c.uuid WHERE b.payment_cycle = '1' AND b.status is null AND b.mrr > 0 ;", ttl="10m")
